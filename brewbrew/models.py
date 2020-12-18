@@ -34,6 +34,9 @@ class Recipe(models.Model):
     dry_hopping_hop3 = models.ForeignKey(RawMaterial, null=True, blank=True, on_delete=models.CASCADE, related_name='recipe_dry_hopping_hop3')
     dry_hopping_hop3_quantity = models.FloatField(null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class RecipeRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
