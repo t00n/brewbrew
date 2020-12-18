@@ -20,6 +20,7 @@ class Tank(models.Model):
 
 
 class Recipe(models.Model):
+	name = models.CharField(max_length=50)
 	recipe = models.Text()
 	fermentation_time = models.IntegerField()
 	fermentation_tank = models.ForeignKey(Tank)
@@ -36,6 +37,8 @@ class RecipeRawMaterial(models.Model):
 
 class Brew(models.Model):
 	original_recipe = models.ForeignKey(Recipe)
+	name = models.CharField(max_length=50)
+	recipe = models.Text()
 	fermentation_time = models.IntegerField()
 	fermentation_tank = models.ForeignKey(Tank)
 	dry_hopping_time = models.IntegerField()
