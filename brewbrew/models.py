@@ -23,7 +23,6 @@ class Recipe(models.Model):
     name = models.CharField(max_length=50)
     recipe = models.TextField()
     fermentation_time = models.IntegerField()
-    fermentation_tank = models.ForeignKey(Tank, on_delete=models.CASCADE)
     dry_hopping_time = models.IntegerField()
     dry_hopping_hop1 = models.ForeignKey(RawMaterial, on_delete=models.CASCADE, related_name='recipe_dry_hopping_hop1')
     dry_hopping_hop2 = models.ForeignKey(RawMaterial, on_delete=models.CASCADE, related_name='recipe_dry_hopping_hop2')
