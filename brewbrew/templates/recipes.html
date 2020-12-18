@@ -1,0 +1,21 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+
+{% for recipe in recipes %}
+
+
+
+{% endfor %}
+
+<div>
+	<form action="/recipes" method="post">
+	  {% csrf_token %}
+	  {% bootstrap_form create_form %}
+	  {% buttons %}
+	    <button type="submit" class="btn btn-primary">
+	      Create
+	    </button>
+	  {% endbuttons %}
+	</form>
+</div>
