@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+
+    <title>Title</title>
+  </head>
+ <body>
+    <div style="width:80%; margin:auto">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/planning">Planning</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/recipes">My recipes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/stock">Stock</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/tanks">Tanks</a>
+          </li>
+        </ul>
+      </nav>
+      {% block content %}
+
+      {% endblock %} 
+    </div>
+  </body>
+</html>

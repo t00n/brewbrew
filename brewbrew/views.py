@@ -10,4 +10,9 @@ def recipes(request):
         if form.is_valid():
             Recipe.objects.create(**form.cleaned_data)
 
-    return render(request, 'recipes.html', {"create_form": RecipeForm})
+    recipes = Recipe.objects.all().order_by('name')
+
+    return render(request, 'recipes.html', {
+        "create_form": RecipeForm,
+        "recipes": recipes
+    })
