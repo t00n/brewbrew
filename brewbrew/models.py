@@ -60,6 +60,7 @@ class RecipeYeast(models.Model):
 
 class RecipeFermentationStep(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, help_text="Name of the fermentation step")
     temperature = models.FloatField(help_text="Temperature during this fermentation step")
     duration = models.IntegerField(help_text="Duration of this fermentation step in days")
 
