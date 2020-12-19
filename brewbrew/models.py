@@ -17,6 +17,7 @@ class RawMaterialBatch(models.Model):
     producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
     batch = models.CharField(max_length=50)
     facture = models.CharField(max_length=50)
+    quantity = models.FloatField()
 
 
 class Tank(models.Model):
