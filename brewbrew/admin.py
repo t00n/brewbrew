@@ -1,11 +1,11 @@
 from django.contrib import admin
 from .models import (
-    RawMaterial,
+    Ingredient,
     Recipe,
 )
 
 
-class RawMaterialAdmin(admin.ModelAdmin):
+class IngredientAdmin(admin.ModelAdmin):
     pass
 
 
@@ -13,5 +13,5 @@ class RecipeAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(RawMaterial, RawMaterialAdmin)
+admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
