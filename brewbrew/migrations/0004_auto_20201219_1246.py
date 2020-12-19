@@ -3,6 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 
+from datetime import timedelta
 
 class Migration(migrations.Migration):
 
@@ -130,7 +131,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recipe',
             name='boiling_duration',
-            field=models.DurationField(default=0, help_text='Duration of boiling step'),
+            field=models.DurationField(default=timedelta(0), help_text='Duration of boiling step'),
             preserve_default=False,
         ),
         migrations.AddField(
