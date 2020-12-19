@@ -33,7 +33,7 @@ class RecipeMashingIngredient(models.Model):
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
-class BrewingStep(models.Model):
+class RecipeBrewingStep(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     temperature = models.FloatField(help_text="Temperature during this brewing step")
     duration = models.IntegerField(help_text="Duration of this brewing step in minutes")
@@ -52,13 +52,13 @@ class RecipeWhirlpoolIngredient(models.Model):
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
-class RecipeYeasts(models.Model):
+class RecipeYeast(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     yeast = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
-class FermentationStep(models.Model):
+class RecipeFermentationStep(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     temperature = models.FloatField(help_text="Temperature during this fermentation step")
     duration = models.IntegerField(help_text="Duration of this fermentation step in days")
@@ -81,7 +81,7 @@ class Recipe(models.Model):
     mashing_water_quantity = models.FloatField(help_text="Liters of water to add during mashing")
 
     # Brewing
-    # cf BrewingStep
+    # cf RecipeBrewingStep
 
     # Filtration
     filtration_water_quantity = models.FloatField(help_text="Liters of waters to add during filtration")
@@ -103,9 +103,9 @@ class Recipe(models.Model):
 
     # Fermentation
     yeasts = models.ManyToManyField(
-        Ingredient, through=RecipeYeasts, 
+        Ingredient, through=RecipeYeast, 
         related_name="recipe_yeasts", help_text="Yeasts to add before fermentation")
-    # cf FermentationStep
+    # cf RecipeFermentationStep
 
     # Adjuncts/Dryhopping
     adjuncts = models.ManyToManyField(
