@@ -8,13 +8,13 @@ class RawMaterial(models.Model):
         return self.variete
 
 
-class Producer(models.Model):
+class Supplier(models.Model):
     name = models.CharField(max_length=50)
 
 
 class RawMaterialBatch(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
-    producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
+    producer = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     batch = models.CharField(max_length=50)
     facture = models.CharField(max_length=50)
     quantity = models.FloatField()
