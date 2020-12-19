@@ -87,7 +87,7 @@ class Recipe(models.Model):
     filtration_water_quantity = models.FloatField(help_text="Liters of waters to add during filtration")
 
     # Boiling
-    boiling_duration = models.DurationField(help_text="Duration of boiling step")
+    boiling_duration = models.IntegerField(help_text="Duration of boiling step in minutes")
     boiling_ingredients = models.ManyToManyField(
         Ingredient, through=RecipeBoilingIngredient,
         related_name="recipe_boiling", help_text="Ingredients to add during boiling")
