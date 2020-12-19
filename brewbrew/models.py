@@ -64,7 +64,7 @@ class RecipeFermentationStep(models.Model):
     duration = models.IntegerField(help_text="Duration of this fermentation step in days")
 
 
-class RecipeAdjuncts(models.Model):
+class RecipeAdjunct(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     yeast = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
@@ -109,7 +109,7 @@ class Recipe(models.Model):
 
     # Adjuncts/Dryhopping
     adjuncts = models.ManyToManyField(
-        Ingredient, through=RecipeAdjuncts, 
+        Ingredient, through=RecipeAdjunct, 
         related_name="recipe_adjuncts", help_text="Adjuncts/Hops to add during fermentation")
 
     def __str__(self):
