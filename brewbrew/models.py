@@ -144,6 +144,7 @@ class Recipe(models.Model):
 
 class BrewMashingIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
@@ -156,6 +157,7 @@ class BrewBrewingStep(models.Model):
 
 class BrewBoilingIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
     time = models.IntegerField(help_text="When the ingredient was added (in minutes from the end of boiling)")
@@ -163,12 +165,14 @@ class BrewBoilingIngredientBatch(models.Model):
 
 class BrewWhirlpoolIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
 
 class BrewYeastBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
+    yeast = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     yeast_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
@@ -179,18 +183,28 @@ class BrewFermentationStep(models.Model):
     temperature = models.FloatField(help_text="Temperature during this fermentation step")
     duration = models.IntegerField(help_text="Duration of this fermentation step in days")
 
+    class Meta:
+        verbose_name_plural = "Fermentation steps"
+
 
 class BrewFermentationAnalysis(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     day = models.IntegerField(help_text="Day number from the start of fermentation when the analysis occured")
-    plateau_degree_or_density = models.FloatField(help_text="Gravity expressed in °p or sg")
+    plato_degree_or_density = models.FloatField(help_text="Gravity expressed in °p or sg")
+
+    class Meta:
+        verbose_name_plural = "Fermentation analysis"
 
 
 class BrewAdjunctBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
     date = models.DateField(help_text="Date when the adjunct/hop was added")
+
+    class Meta:
+        verbose_name = "Fermentation agents/Dry hopping"
 
 
 class Brew(models.Model):
@@ -252,4 +266,4 @@ class Brew(models.Model):
         related_name="brew_adjuncts", help_text="Adjuncts/Hops to add during fermentation")
 
     def __str__(self):
-        return self.name
+        return self.batch_name
