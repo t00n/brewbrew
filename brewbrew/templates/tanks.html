@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style type="text/css">
+dl {font-size: 200%;}
+.tank-used {color: #cc2;}
+</style>
+
+<dl>
+{% for tank, brew in tanks %}
+  <dt class="{% if brew %}tank-used{% endif %}">
+    <i class="fas fa-flask"></i>
+    Tank {{ tank.name }} (#{{ tank.id }})
+  </dt>
+  {% if brew %}
+  <dd>Contains: {{ brew.original_recipe.name }} fermenting since {{ brew.start_date }}</dd>
+  {% else %}
+  <dd>Available</dd>
+  {% endif %}
+{% endfor %}
+</dl>
+
+{% endblock %}

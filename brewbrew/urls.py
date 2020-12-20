@@ -22,4 +22,5 @@ urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
     path('recipes', recipes),
+    path('tanks', tanks)
 ]
