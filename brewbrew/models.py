@@ -30,9 +30,9 @@ class Supplier(models.Model):
 
 class IngredientBatch(models.Model):
     ingredient = models.ForeignKey(Ingredient,
-        on_delete=models.RESTRICT, help_text="Ingredient")
+        on_delete=models.PROTECT, help_text="Ingredient")
     supplier = models.ForeignKey(Supplier, 
-        on_delete=models.RESTRICT, help_text="Supplier")
+        on_delete=models.PROTECT, help_text="Supplier")
     batch_number = models.CharField(max_length=50, help_text="Batch number")
     bill_number = models.CharField(max_length=50, help_text="Bill number")
     quantity = models.FloatField(help_text="Quantity in the batch")
@@ -45,7 +45,7 @@ class Tank(models.Model):
 
 class RecipeMashingIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    mashing_ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    mashing_ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
@@ -57,20 +57,20 @@ class RecipeBrewingStep(models.Model):
 
 class RecipeBoilingIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    boiling_ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    boiling_ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
     time = models.IntegerField(help_text="When to add the ingredient (in minutes from the end of boiling)")
 
 
 class RecipeWhirlpoolIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    whirlpool_ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    whirlpool_ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
 class RecipeYeast(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    yeast = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    yeast = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
@@ -83,7 +83,7 @@ class RecipeFermentationStep(models.Model):
 
 class RecipeAdjunct(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
