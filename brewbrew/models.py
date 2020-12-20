@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import timedelta
 
 from django.db import models
 
@@ -267,3 +268,8 @@ class Brew(models.Model):
 
     def __str__(self):
         return self.batch_name
+
+    @property
+    def end_date(self):
+        days = sum(step.duration for step in self.brewfermentationstep_set.all())
+        return self.start_date + timedelta(days=days)

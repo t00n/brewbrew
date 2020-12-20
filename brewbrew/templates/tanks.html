@@ -13,7 +13,7 @@ dl {font-size: 200%;}
     Tank {{ tank.name }} (#{{ tank.id }})
   </dt>
   {% if brew %}
-  <dd>Contains: {{ brew.original_recipe.name }} fermenting since {{ brew.start_date }}</dd>
+  <dd>Contains: {{ brew.original_recipe.name }} fermenting since {{ brew.start_date }} up to {{ brew.end_date }}</dd>
   {% else %}
   <dd>Available</dd>
   {% endif %}

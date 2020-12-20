@@ -1,6 +1,5 @@
-from datetime import datetime
+from datetime import date
 from django.shortcuts import render
-from django.utils import timezone
 
 from .forms import RecipeForm
 from .models import Brew, Recipe, Tank
@@ -9,13 +8,10 @@ def home(request):
     return render(request, 'home.html')
 
 def tanks(request):
-    now = datetime.now()
+    now = date.today()
     tanks = {t: None for t in Tank.objects.all()}
     for brew in Brew.objects.all():
-        days = sum(step.duration for step in brew.brewfermentationstep_set.all())
-        start_date = datetime.fromordinal(brew.start_date.toordinal())
-
-        if start_date <= now <= (start_date + timezone.timedelta(days=days)):
+        if brew.start_date <= now <= brew.end_date:
             assert tanks[brew.fermentation_tank] is None
             tanks[brew.fermentation_tank] = brew
     
