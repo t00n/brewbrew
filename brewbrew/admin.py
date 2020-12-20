@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import (
     Ingredient,
+    IngredientBatch,
+    Supplier,
+    Tank,
     RecipeMashingIngredient,
     RecipeBrewingStep,
     RecipeBoilingIngredient,
@@ -12,7 +15,23 @@ from .models import (
 )
 
 
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(IngredientBatch)
+class IngredientBatchAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Supplier)
+class SupplierAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Tank)
+class TankAdmin(admin.ModelAdmin):
     pass
 
 
@@ -51,6 +70,7 @@ class RecipeAdjunctInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [
         RecipeMashingIngredientInline,
@@ -61,7 +81,3 @@ class RecipeAdmin(admin.ModelAdmin):
         RecipeFermentationStepInline,
         RecipeAdjunctInline,
     ]
-
-
-admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(Recipe, RecipeAdmin)
