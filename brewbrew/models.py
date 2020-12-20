@@ -12,7 +12,7 @@ class IngredientType(Enum):
 
 
 class Ingredient(models.Model):
-    type = models.CharField(max_length=50, choices=[(tag, tag.value) for tag in IngredientType],
+    type = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in IngredientType],
         help_text="The type of ingredient")
     variety = models.CharField(max_length=50, help_text="Name/variety of the ingredient")
     unit = models.CharField(max_length=10, help_text="Unit of measure of the ingredient")
