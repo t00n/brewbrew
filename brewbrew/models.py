@@ -28,7 +28,7 @@ class Supplier(models.Model):
 class IngredientBatch(models.Model):
     ingredient = models.ForeignKey(Ingredient,
         on_delete=models.RESTRICT, help_text="Ingredient")
-    producer = models.ForeignKey(Supplier, 
+    supplier = models.ForeignKey(Supplier, 
         on_delete=models.RESTRICT, help_text="Supplier")
     batch_number = models.CharField(max_length=50, help_text="Batch number")
     bill_number = models.CharField(max_length=50, help_text="Bill number")
