@@ -42,6 +42,9 @@ class Tank(models.Model):
     name = models.CharField(max_length=50, help_text="Name/number of the tank", unique=True)
     capacity = models.IntegerField(help_text="Capacity in liters")
 
+    def __str__(self):
+        return f'Tank {self.name}'
+
 
 class RecipeMashingIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
