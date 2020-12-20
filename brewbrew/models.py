@@ -133,15 +133,15 @@ class Recipe(models.Model):
 
 
 class Brew(models.Model):
-    original_recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    original_recipe = models.ForeignKey(Recipe, on_delete=models.PROTECT)
     name = models.CharField(max_length=50)
     recipe = models.TextField()
     fermentation_time = models.IntegerField()
-    fermentation_tank = models.ForeignKey(Tank, on_delete=models.CASCADE)
+    fermentation_tank = models.ForeignKey(Tank, on_delete=models.PROTECT)
     dry_hopping_time = models.IntegerField()
-    dry_hopping_hop1 = models.ForeignKey(Ingredient, null=True, blank=True, on_delete=models.CASCADE, related_name='brew_dry_hopping_hop1')
+    dry_hopping_hop1 = models.ForeignKey(Ingredient, null=True, blank=True, on_delete=models.PROTECT, related_name='brew_dry_hopping_hop1')
     dry_hopping_hop1_quantity = models.FloatField(null=True, blank=True)
-    dry_hopping_hop2 = models.ForeignKey(Ingredient, null=True, blank=True, on_delete=models.CASCADE, related_name='brew_dry_hopping_hop2')
+    dry_hopping_hop2 = models.ForeignKey(Ingredient, null=True, blank=True, on_delete=models.PROTECT, related_name='brew_dry_hopping_hop2')
     dry_hopping_hop2_quantity = models.FloatField(null=True, blank=True)
-    dry_hopping_hop3 = models.ForeignKey(Ingredient, null=True, blank=True, on_delete=models.CASCADE, related_name='brew_dry_hopping_hop3')
+    dry_hopping_hop3 = models.ForeignKey(Ingredient, null=True, blank=True, on_delete=models.PROTECT, related_name='brew_dry_hopping_hop3')
     dry_hopping_hop3_quantity = models.FloatField(null=True, blank=True)
