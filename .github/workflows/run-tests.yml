@@ -12,8 +12,8 @@ jobs:
     steps:
     - name: Upgrade Ubuntu
       run: |
-        apt-get update
-        apt-get upgrade
+        sudo apt-get update
+        sudo apt-get upgrade
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
