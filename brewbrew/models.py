@@ -184,6 +184,7 @@ class BrewAdjunctBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
+    date = models.DateField(help_text="Date when the adjunct/hop was added")
 
 
 class Brew(models.Model):
