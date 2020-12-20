@@ -11,10 +11,19 @@ class IngredientType(Enum):
     FRUIT = "Fruit"
 
 
+class Supplier(models.Model):
+    name = models.CharField(max_length=50, help_text="Name of the supplier")
+
+    def __str__(self):
+        return self.name
+
+
 class Ingredient(models.Model):
     type = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in IngredientType],
         help_text="The type of ingredient")
     variety = models.CharField(max_length=50, help_text="Name/variety of the ingredient")
+    supplier = models.ForeignKey(Supplier, 
+        on_delete=models.PROTECT, help_text="Supplier")
     unit = models.CharField(max_length=10, help_text="Unit of measure of the ingredient")
 
     class Meta:
@@ -24,18 +33,15 @@ class Ingredient(models.Model):
         return f'{self.variety} ({self.unit})'
 
 
-class Supplier(models.Model):
-    name = models.CharField(max_length=50, help_text="Name of the supplier")
-
-
 class IngredientBatch(models.Model):
     ingredient = models.ForeignKey(Ingredient,
         on_delete=models.PROTECT, help_text="Ingredient")
-    supplier = models.ForeignKey(Supplier, 
-        on_delete=models.PROTECT, help_text="Supplier")
     batch_number = models.CharField(max_length=50, help_text="Batch number")
     bill_number = models.CharField(max_length=50, help_text="Bill number")
     quantity = models.FloatField(help_text="Quantity in the batch")
+
+    def __str__(self):
+        return f"{self.ingredient.variety} {self.supplier} ({self.batch_number})"
 
 
 class Tank(models.Model):
