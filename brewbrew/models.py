@@ -85,6 +85,7 @@ class RecipeAdjunct(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
+    day = models.IntegerField(help_text="Day to add the adjunct/hop (from the start of fermentation)")
 
 
 class Recipe(models.Model):
