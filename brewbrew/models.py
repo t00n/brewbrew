@@ -17,6 +17,9 @@ class Ingredient(models.Model):
     variety = models.CharField(max_length=50, help_text="Name/variety of the ingredient")
     unit = models.CharField(max_length=10, help_text="Unit of measure of the ingredient")
 
+    class Meta:
+        unique_together = ['type', 'variety']
+
     def __str__(self):
         return f'{self.variety} ({self.unit})'
 
