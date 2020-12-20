@@ -85,7 +85,6 @@ class RecipeAdjunct(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=50, help_text="Name of the recipe")
-    recipe = models.TextField(help_text="Written description of the recipe")
 
     # Mashing
     mashing_ingredients = models.ManyToManyField(
