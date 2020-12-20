@@ -1,4 +1,5 @@
 from django.contrib import admin
+from fieldsets_with_inlines import FieldsetsInlineMixin
 from .models import (
     Ingredient,
     IngredientBatch,
@@ -71,10 +72,14 @@ class RecipeAdjunctInline(admin.TabularInline):
 
 
 @admin.register(Recipe)
-class RecipeAdmin(admin.ModelAdmin):
-    inlines = [
+class RecipeAdmin(FieldsetsInlineMixin, admin.ModelAdmin):
+    fieldsets_with_inlines = [
+        ('General', {'fields': ['name']}),
+        ('Mashing', {'fields': ['mashing_water_quantity']}),
         RecipeMashingIngredientInline,
         RecipeBrewingStepInline,
+        ('Filtration', {'fields': ['filtration_water_quantity']}),
+        ('Boiling', {'fields': ['boiling_duration']}),
         RecipeBoilingIngredientInline,
         RecipeWhirlpoolIngredientInline,
         RecipeYeastInline,
