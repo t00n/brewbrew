@@ -194,7 +194,8 @@ class Brew(models.Model):
 
     # general info
     start_date = models.DateField(help_text="Date to start brewing")
-    total_quantity = models.PositiveIntegerField(help_text="Quantity of beer obtained with this brew", null=True, blank=True)
+    total_quantity = models.PositiveIntegerField(
+        help_text="Quantity of beer obtained with this brew in liters", null=True, blank=True)
 
     # Mashing
     mashing_ingredients = models.ManyToManyField(
