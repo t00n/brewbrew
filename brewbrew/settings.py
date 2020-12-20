@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'bootstrap4',
+    'fieldsets_with_inlines',
 
     'brewbrew',
 ]
