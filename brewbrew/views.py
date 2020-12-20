@@ -3,6 +3,9 @@ from django.shortcuts import render
 from .forms import RecipeForm
 from .models import Recipe
 
+def home(request):
+    return render(request, 'home.html')
+
 def recipes(request):
     if request.method == "POST":
         form = RecipeForm(request.POST)
