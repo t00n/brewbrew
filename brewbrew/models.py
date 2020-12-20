@@ -18,7 +18,7 @@ class Ingredient(models.Model):
     unit = models.CharField(max_length=10, help_text="Unit of measure of the ingredient")
 
     def __str__(self):
-        return self.variety
+        return f'{self.variety} ({self.unit})'
 
 
 class Supplier(models.Model):
