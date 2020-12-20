@@ -30,7 +30,7 @@ class Ingredient(models.Model):
         unique_together = ['type', 'variety']
 
     def __str__(self):
-        return f'{self.variety} ({self.unit})'
+        return f'{self.variety} {self.supplier} ({self.unit})'
 
 
 class IngredientBatch(models.Model):
@@ -41,7 +41,7 @@ class IngredientBatch(models.Model):
     quantity = models.FloatField(help_text="Quantity in the batch")
 
     def __str__(self):
-        return f"{self.ingredient.variety} {self.supplier} ({self.batch_number})"
+        return f"{self.ingredient.variety} {self.ingredient.supplier} ({self.batch_number})"
 
 
 class Tank(models.Model):
