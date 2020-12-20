@@ -79,7 +79,7 @@ class RecipeFermentationStep(models.Model):
 
 class RecipeAdjunct(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    yeast = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.RESTRICT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
