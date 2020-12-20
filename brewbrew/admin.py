@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.shortcuts import redirect
 from fieldsets_with_inlines import FieldsetsInlineMixin
 from .models import (
     Ingredient,
@@ -80,6 +81,12 @@ class RecipeAdjunctInline(admin.TabularInline):
     extra = 0
 
 
+def create_brew(modeladmin, request, queryset):
+    brew = queryset[0].create_brew()
+
+    return redirect(f'/admin/brewbrew/brew/{brew.id}/change')
+create_brew.short_description = "Brew using this recipe"
+
 @admin.register(Recipe)
 class RecipeAdmin(FieldsetsInlineMixin, admin.ModelAdmin):
     fieldsets_with_inlines = [
@@ -95,6 +102,8 @@ class RecipeAdmin(FieldsetsInlineMixin, admin.ModelAdmin):
         RecipeFermentationStepInline,
         RecipeAdjunctInline,
     ]
+
+    actions = [create_brew]
 
 class BrewMashingIngredientBatchInline(admin.TabularInline):
     model = BrewMashingIngredientBatch
@@ -153,6 +162,6 @@ class BrewAdmin(FieldsetsInlineMixin, admin.ModelAdmin):
         BrewYeastBatchInline,
         ('Fermentation', {'fields': ['fermentation_tank', 'fermentation_comments']}),
         BrewFermentationStepInline,
-        BrewFermentationAnalysisInline,
         BrewAdjunctBatchInline,
+        BrewFermentationAnalysisInline,
     ]

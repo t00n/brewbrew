@@ -1,5 +1,5 @@
 from enum import Enum
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.db import models
 
@@ -143,10 +143,60 @@ class Recipe(models.Model):
         return self.name
 
 
+    def create_brew(self):
+        brew = Brew()
+        brew.original_recipe = self
+        brew.start_date = datetime.now().date()
+        brew.mashing_water_quantity = self.mashing_water_quantity
+        brew.filtration_water_quantity = self.filtration_water_quantity
+        brew.boiling_duration = self.boiling_duration
+        brew.save()
+
+        # Mashing
+        for mashing_ingredient in self.recipemashingingredient_set.all():
+            brew.brewmashingingredientbatch_set.create(
+                    brew=brew,
+                    ingredient=mashing_ingredient.ingredient,
+                    quantity=mashing_ingredient.quantity,
+            )
+
+        for boiling_ingredient in self.recipeboilingingredient_set.all():
+            brew.brewboilingingredientbatch_set.create(
+                    brew=brew,
+                    ingredient=boiling_ingredient.ingredient,
+                    quantity=boiling_ingredient.quantity,
+                    time=boiling_ingredient.time,
+            )
+
+        for whirlpool_ingredient in self.recipeboilingingredient_set.all():
+            brew.brewboilingingredientbatch_set.create(
+                    brew=brew,
+                    ingredient=whirlpool_ingredient.ingredient,
+                    quantity=whirlpool_ingredient.quantity,
+            )
+
+        for yeast in self.recipeyeast_set.all():
+            brew.brewyeastbatch_set.create(
+                    brew=brew,
+                    yeast=yeast.yeast,
+                    quantity=yeast.quantity,
+            )
+
+        for adjunct in self.recipeadjunct_set.all():
+            brew.brewadjunctbatch_set.create(
+                    brew=brew,
+                    ingredient=adjunct.ingredient,
+                    quantity=adjunct.quantity,
+                    date=brew.start_date + timedelta(days=adjunct.day)
+            )
+
+        return brew
+
+
 class BrewMashingIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
-    ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
+    ingredient_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
 
@@ -159,22 +209,23 @@ class BrewBrewingStep(models.Model):
 class BrewBoilingIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
-    ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
+    ingredient_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
-    time = models.IntegerField(help_text="When the ingredient was added (in minutes from the end of boiling)")
+    time = models.IntegerField(
+        null=True, blank=True, help_text="When the ingredient was added (in minutes from the end of boiling)")
 
 
 class BrewWhirlpoolIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
-    ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
+    ingredient_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
 
 class BrewYeastBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     yeast = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
-    yeast_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
+    yeast_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
 
@@ -200,7 +251,7 @@ class BrewFermentationAnalysis(models.Model):
 class BrewAdjunctBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
-    ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT)
+    ingredient_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
     date = models.DateField(help_text="Date when the adjunct/hop was added")
 
@@ -255,7 +306,8 @@ class Brew(models.Model):
     yeasts = models.ManyToManyField(
         IngredientBatch, through=BrewYeastBatch, 
         related_name="brew_yeasts", help_text="Yeasts to add before fermentation")
-    fermentation_tank = models.ForeignKey(Tank, on_delete=models.PROTECT, help_text="Tank in which to ferment")
+    fermentation_tank = models.ForeignKey(Tank, null=True, blank=True,
+        on_delete=models.PROTECT, help_text="Tank in which to ferment")
     fermentation_comments = models.TextField(null=True, blank=True)
     # cf BrewFermentationStep
     # cf BrewFermentationAnalysis
