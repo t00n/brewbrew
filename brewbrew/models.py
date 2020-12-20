@@ -45,7 +45,7 @@ class Tank(models.Model):
 
 class RecipeMashingIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    mashing_ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
@@ -57,14 +57,14 @@ class RecipeBrewingStep(models.Model):
 
 class RecipeBoilingIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    boiling_ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
     time = models.IntegerField(help_text="When to add the ingredient (in minutes from the end of boiling)")
 
 
 class RecipeWhirlpoolIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
-    whirlpool_ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
 
