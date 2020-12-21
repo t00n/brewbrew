@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style type="text/css">
+@keyframes breathe {
+  0%, 100% {font-size: 50%;}
+  85% {font-size: 100%;}
+}
+.breathing {
+  animation: breathe 1s infinite;
+}
+</style>
 
 <div class="row">
 {% for tank, brew in tanks %}
@@ -34,11 +43,11 @@
             </tr>
             {% now "Y-m-d" as today %}
             {% for start_date, end_date, step in brew.fermentation_steps %}
-              <tr>
+              <tr class="{% if start_date|date:'Y-m-d' <= today and today <= end_date|date:'Y-m-d' %}bg-warning{% endif %}">
                 <th>
                   {{ step.name }}
                   {% if start_date|date:'Y-m-d' <= today and today <= end_date|date:'Y-m-d' %}
-                    &nbsp;<span class="badge bg-warning"><i class="fas fa-star"></i></span>
+                    &nbsp;<i class="fas fa-bullseye breathing"></i>
                   {% endif %}
                 </th>
                 <td>{{ step.temperature }}&deg;C</td>
@@ -65,6 +74,7 @@
             {% for recipe in original_recipes %}
               <a class="dropdown-item" href="#">
                 <b>{{ recipe.name }}</b>
+                &nbsp;
                 <em class="float-right">{{ recipe.total_duration }} days</em>
               </a>
             {% endfor %}
