@@ -1,23 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style type="text/css">
-dl {font-size: 200%;}
-.tank-used {color: #cc2;}
-</style>
 
-<dl>
+<div class="row">
 {% for tank, brew in tanks %}
-  <dt class="{% if brew %}tank-used{% endif %}">
-    <i class="fas fa-flask"></i>
-    Tank {{ tank.name }} (#{{ tank.id }})
-  </dt>
-  {% if brew %}
-  <dd>Contains: {{ brew.original_recipe.name }} fermenting since {{ brew.start_date }} up to {{ brew.end_date }}</dd>
-  {% else %}
-  <dd>Available</dd>
-  {% endif %}
+<div class="col-sm-6 col-md-3">
+  <div class="card">
+    <h5 class="card-header {% if brew %}bg-warning{% else %}bg-light{% endif %}">
+      <i class="fas fa-flask"></i>
+      Tank {{ tank.name }}
+      <small>{{ tank.capacity }}l</small>
+    </h5>
+    {% if brew %}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <i class="fas fa-beer"></i>&nbsp;
+          {{ brew.original_recipe.name }}
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-calendar"></i>&nbsp;
+          {{ brew.start_date }}
+          &nbsp;<i class="fas fa-arrow-right"></i>&nbsp;
+          {{ brew.end_date }}
+        </li>
+        <li class="list-group-item bg-danger"><b>TODO:</b> add details about ongoing fermentation</li>
+      </ul>
+    {% else %}
+      <div class="card-body">Available for brewing !</div>
+    {% endif %}
+  </div>
+</div>
 {% endfor %}
-</dl>
+</div>
 
 {% endblock %}
