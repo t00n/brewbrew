@@ -18,6 +18,7 @@ def tanks(request):
     
     return render(request, 'tanks.html', {
         'tanks': list(tanks.items()),
+        'original_recipes': Recipe.objects.all()
     })
 
 def recipes(request):

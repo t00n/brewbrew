@@ -142,6 +142,9 @@ class Recipe(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def total_duration(self):
+        return sum(step.duration for step in self.recipefermentationstep_set.all())
 
     def create_brew(self):
         brew = Brew()

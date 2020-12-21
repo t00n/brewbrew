@@ -50,9 +50,9 @@
           </li>
         </ul>
       </nav>
-      {% block content %}
-
-      {% endblock %}
+      {% bootstrap_messages %}
+      {% block content %}{% endblock %}
     </div>
+    {% bootstrap_javascript jquery='full' %}
   </body>
 </html>
