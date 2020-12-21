@@ -8,10 +8,10 @@ def home(request):
     return render(request, 'home.html')
 
 def tanks(request):
-    now = date.today()
+    today = date.today()
     tanks = {t: None for t in Tank.objects.all()}
     for brew in Brew.objects.all():
-        if brew.start_date <= now <= brew.end_date:
+        if today <= brew.end_date:
         	if brew.fermentation_tank is not None:
 	            assert tanks[brew.fermentation_tank] is None
 	            tanks[brew.fermentation_tank] = brew

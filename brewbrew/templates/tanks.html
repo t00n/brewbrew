@@ -4,7 +4,7 @@
 
 <div class="row">
 {% for tank, brew in tanks %}
-<div class="col-sm-6 col-md-3">
+<div class="col-sm-6">
   <div class="card">
     <h5 class="card-header {% if brew %}bg-warning{% else %}bg-light{% endif %}">
       <i class="fas fa-flask"></i>
@@ -15,7 +15,7 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <i class="fas fa-beer"></i>&nbsp;
-          {{ brew.original_recipe.name }}
+          {{ brew.original_recipe.name }} ({{ brew.batch_name }})
         </li>
         <li class="list-group-item">
           <i class="fas fa-calendar"></i>&nbsp;
@@ -23,7 +23,31 @@
           &nbsp;<i class="fas fa-arrow-right"></i>&nbsp;
           {{ brew.end_date }}
         </li>
-        <li class="list-group-item bg-danger"><b>TODO:</b> add details about ongoing fermentation</li>
+        <li class="list-group-item">
+          <h5>Fermentation planning</h5>
+          <table class="table">
+            <tr>
+              <th></th>
+              <th>t&deg;C</th>
+              <th>From</th>
+              <th><i class="fas fa-arrow-right"></i>&nbsp;To</th>
+            </tr>
+            {% now "Y-m-d" as today %}
+            {% for start_date, end_date, step in brew.fermentation_steps %}
+              <tr>
+                <th>
+                  {{ step.name }}
+                  {% if start_date|date:'Y-m-d' <= today and today <= end_date|date:'Y-m-d' %}
+                    &nbsp;<span class="badge bg-warning"><i class="fas fa-star"></i></span>
+                  {% endif %}
+                </th>
+                <td>{{ step.temperature }}&deg;C</td>
+                <td>{{ start_date }}</td>
+                <td>{{ end_date }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </li>
       </ul>
     {% else %}
       <div class="card-body">Available for brewing !</div>

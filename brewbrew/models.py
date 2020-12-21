@@ -325,3 +325,13 @@ class Brew(models.Model):
     def end_date(self):
         days = sum(step.duration for step in self.brewfermentationstep_set.all())
         return self.start_date + timedelta(days=days)
+
+    @property
+    def fermentation_steps(self):
+        res = []
+        start_date = self.start_date
+        for step in self.brewfermentationstep_set.all():
+            end_date = start_date + timedelta(days=step.duration)
+            res.append((start_date, end_date, step))
+            start_date = end_date
+        return res
