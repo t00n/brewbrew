@@ -26,7 +26,7 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <i class="fas fa-beer"></i>&nbsp;
-          {{ brew.original_recipe.name }} ({{ brew.batch_name }})
+          <b>{{ brew.original_recipe.name }}</b> ({{ brew.batch_name }})
         </li>
         <li class="list-group-item">
           <i class="fas fa-calendar"></i>&nbsp;
@@ -35,7 +35,7 @@
           {{ brew.end_date }}
         </li>
         <li class="list-group-item">
-          <h5>Fermentation planning</h5>
+          <!-- <h5>Fermentation planning</h5> -->
           <table class="table">
             <tr>
               <th></th>
@@ -47,10 +47,11 @@
             {% for start_date, end_date, step in brew.fermentation_steps %}
               <tr class="{% if start_date|date:'Y-m-d' <= today and today <= end_date|date:'Y-m-d' %}bg-warning{% endif %}">
                 <th>
-                  {{ step.name }}
                   {% if start_date|date:'Y-m-d' <= today and today <= end_date|date:'Y-m-d' %}
-                    &nbsp;<i class="fas fa-bullseye breathing"></i>
+                    <i class="fas fa-ellipsis-h breathing"></i>
                   {% endif %}
+                  <br/>
+                  {{ step.name }}
                 </th>
                 <td>{{ step.temperature }}&deg;C</td>
                 <td>{{ start_date }}</td>
