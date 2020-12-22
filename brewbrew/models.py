@@ -31,7 +31,7 @@ class Ingredient(models.Model):
     unit = models.CharField(max_length=10, help_text="Unit of measure of the ingredient")
 
     class Meta:
-        unique_together = ['type', 'variety']
+        unique_together = ['type', 'variety', 'supplier']
 
     def __str__(self):
         return f'{self.variety} {self.supplier} ({self.unit})'
@@ -44,14 +44,19 @@ class IngredientBatch(models.Model):
     ingredient = models.ForeignKey(Ingredient,
         on_delete=models.PROTECT, help_text="Ingredient")
     batch_number = models.CharField(max_length=50, help_text="Batch number")
-    bill_number = models.CharField(max_length=50, help_text="Bill number")
-    quantity = models.FloatField(help_text="Quantity in the batch")
 
     def __str__(self):
         return f"{self.ingredient.variety} {self.ingredient.supplier} ({self.batch_number})"
 
     class Meta:
         ordering = ['ingredient__variety', 'ingredient__supplier', '-batch_number']
+
+
+class IngredientBatchInput(models.Model):
+    ingredient_batch = models.ForeignKey(IngredientBatch, on_delete=models.PROTECT,
+        help_text="The batch that this entry refers to")
+    bill_number = models.CharField(max_length=50, help_text="Bill number")
+    quantity = models.FloatField(help_text="Quantity ")
 
 
 class Tank(models.Model):
