@@ -4,6 +4,7 @@ from fieldsets_with_inlines import FieldsetsInlineMixin
 from .models import (
     Ingredient,
     IngredientBatch,
+    IngredientBatchInput,
     Supplier,
     Tank,
     RecipeMashingIngredient,
@@ -35,6 +36,9 @@ class IngredientAdmin(admin.ModelAdmin):
 class IngredientBatchAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(IngredientBatchInput)
+class IngredientBatchInputAdmin(admin.ModelAdmin):
+    pass
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):

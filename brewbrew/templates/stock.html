@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<table class="table">
+<table class="table table-hover table-sm">
 	<tr>
 		<th>DATE</th>
 		<th>BREW</th>
@@ -18,7 +18,7 @@
 		<th>TOTAL QUANTITY</th>
 	</tr>
 	{% for entry in stock_entries %}
-	<tr>
+	<tr class="{% if entry.brew %}bg-warning{% else %}table-primary{% endif %}">
 		<td>{{ entry.date }}</td>
 		<td>{{ entry.brew }}</td>
 		<td>{{ entry.name }}</td>
