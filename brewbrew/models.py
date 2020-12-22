@@ -18,6 +18,9 @@ class Supplier(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 
 class Ingredient(models.Model):
     type = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in IngredientType],
@@ -33,6 +36,9 @@ class Ingredient(models.Model):
     def __str__(self):
         return f'{self.variety} {self.supplier} ({self.unit})'
 
+    class Meta:
+        ordering = ['variety', 'supplier__name']
+
 
 class IngredientBatch(models.Model):
     ingredient = models.ForeignKey(Ingredient,
@@ -43,6 +49,9 @@ class IngredientBatch(models.Model):
 
     def __str__(self):
         return f"{self.ingredient.variety} {self.ingredient.supplier} ({self.batch_number})"
+
+    class Meta:
+        ordering = ['ingredient__variety', 'ingredient__supplier', '-batch_number']
 
 
 class Tank(models.Model):
