@@ -107,17 +107,17 @@ class RecipeAdmin(FieldsetsInlineMixin, admin.ModelAdmin):
 
 class BrewMashingIngredientBatchInline(admin.TabularInline):
     model = BrewMashingIngredientBatch
-    extra = 1
+    extra = 0
 
 
 class BrewBrewingStepInline(admin.TabularInline):
     model = BrewBrewingStep
-    extra = 1
+    extra = 0
 
 
 class BrewBoilingIngredientBatchInline(admin.TabularInline):
     model = BrewBoilingIngredientBatch
-    extra = 1
+    extra = 0
 
 
 class BrewWhirlpoolIngredientBatchInline(admin.TabularInline):
@@ -127,12 +127,12 @@ class BrewWhirlpoolIngredientBatchInline(admin.TabularInline):
 
 class BrewYeastBatchInline(admin.TabularInline):
     model = BrewYeastBatch
-    extra = 1
+    extra = 0
 
 
 class BrewFermentationStepInline(admin.TabularInline):
     model = BrewFermentationStep
-    extra = 1
+    extra = 0
 
 
 class BrewFermentationAnalysisInline(admin.TabularInline):

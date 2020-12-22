@@ -58,11 +58,19 @@ class RecipeMashingIngredient(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
+    class Meta:
+        verbose_name = "Mashing ingredient"
+        verbose_name_plural = "Mashing ingredients"
+
 
 class RecipeBrewingStep(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     temperature = models.FloatField(help_text="Temperature during this brewing step")
     duration = models.IntegerField(help_text="Duration of this brewing step in minutes")
+
+    class Meta:
+        verbose_name = "Brewing step"
+        verbose_name_plural = "Brewing steps"
 
 
 class RecipeBoilingIngredient(models.Model):
@@ -71,17 +79,29 @@ class RecipeBoilingIngredient(models.Model):
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
     time = models.IntegerField(help_text="When to add the ingredient (in minutes from the end of boiling)")
 
+    class Meta:
+        verbose_name = "Boiling ingredient"
+        verbose_name_plural = "Boiling ingredients"
+
 
 class RecipeWhirlpoolIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
 
+    class Meta:
+        verbose_name = "Whirlpool ingredient"
+        verbose_name_plural = "Whirlpool ingredients"
+
 
 class RecipeYeast(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     yeast = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
+
+    class Meta:
+        verbose_name = "Yeast"
+        verbose_name_plural = "Yeasts"
 
 
 class RecipeFermentationStep(models.Model):
@@ -90,12 +110,20 @@ class RecipeFermentationStep(models.Model):
     temperature = models.FloatField(help_text="Temperature during this fermentation step")
     duration = models.IntegerField(help_text="Duration of this fermentation step in days")
 
+    class Meta:
+        verbose_name = "Fermentation step"
+        verbose_name_plural = "Fermentation steps"
+
 
 class RecipeAdjunct(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the recipe")
     day = models.IntegerField(help_text="Day to add the adjunct/hop (from the start of fermentation)")
+
+    class Meta:
+        verbose_name = "Adjunct"
+        verbose_name_plural = "Adjuncts"
 
 
 class Recipe(models.Model):
@@ -149,7 +177,14 @@ class Recipe(models.Model):
     def create_brew(self):
         brew = Brew()
         brew.original_recipe = self
-        brew.start_date = datetime.now().date()
+        now = datetime.now()
+        brew.start_date = now.date()
+        brew.brew_start_time = now
+        brew.filtration_start_time = now
+        brew.boiling_start_time = now
+        brew.whirlpool_start_time = now
+        brew.cooling_start_time = now
+        brew.cooling_end_time = now
         brew.mashing_water_quantity = self.mashing_water_quantity
         brew.filtration_water_quantity = self.filtration_water_quantity
         brew.boiling_duration = self.boiling_duration
@@ -171,8 +206,8 @@ class Recipe(models.Model):
                     time=boiling_ingredient.time,
             )
 
-        for whirlpool_ingredient in self.recipeboilingingredient_set.all():
-            brew.brewboilingingredientbatch_set.create(
+        for whirlpool_ingredient in self.recipewhirlpoolingredient_set.all():
+            brew.brewwhirlpoolingredientbatch_set.create(
                     brew=brew,
                     ingredient=whirlpool_ingredient.ingredient,
                     quantity=whirlpool_ingredient.quantity,
@@ -202,11 +237,19 @@ class BrewMashingIngredientBatch(models.Model):
     ingredient_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
+    class Meta:
+        verbose_name = "Mashing ingredient"
+        verbose_name_plural = "Mashing ingredients"
+
 
 class BrewBrewingStep(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     temperature = models.FloatField(help_text="Temperature during this brewing step")
     duration = models.IntegerField(help_text="Duration of this brewing step in minutes")
+
+    class Meta:
+        verbose_name = "Brewing step"
+        verbose_name_plural = "Brewing steps"
 
 
 class BrewBoilingIngredientBatch(models.Model):
@@ -217,6 +260,9 @@ class BrewBoilingIngredientBatch(models.Model):
     time = models.IntegerField(
         null=True, blank=True, help_text="When the ingredient was added (in minutes from the end of boiling)")
 
+    class Meta:
+        verbose_name_plural = "Boiling ingredients"
+
 
 class BrewWhirlpoolIngredientBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
@@ -224,12 +270,18 @@ class BrewWhirlpoolIngredientBatch(models.Model):
     ingredient_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
 
+    class Meta:
+        verbose_name_plural = "Whirlpool ingredients"
+
 
 class BrewYeastBatch(models.Model):
     brew = models.ForeignKey("Brew", on_delete=models.CASCADE)
     yeast = models.ForeignKey(Ingredient, on_delete=models.PROTECT)
     yeast_batch = models.ForeignKey(IngredientBatch, null=True, blank=True, on_delete=models.PROTECT)
     quantity = models.FloatField(help_text="Quantity to use in the brew")
+
+    class Meta:
+        verbose_name_plural = "Yeasts"
 
 
 class BrewFermentationStep(models.Model):
@@ -316,7 +368,6 @@ class Brew(models.Model):
     # cf BrewFermentationAnalysis
 
     # Adjuncts/Dryhopping
-    adjuncts_start_time = models.DateTimeField("Start of the adjuncts/dryhopping stage", null=True, blank=True)
     adjuncts = models.ManyToManyField(
         IngredientBatch, through=BrewAdjunctBatch, 
         related_name="brew_adjuncts", help_text="Adjuncts/Hops to add during fermentation")
