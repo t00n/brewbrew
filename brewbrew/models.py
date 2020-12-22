@@ -190,43 +190,71 @@ class Recipe(models.Model):
         brew.boiling_duration = self.boiling_duration
         brew.save()
 
-        # Mashing
         for mashing_ingredient in self.recipemashingingredient_set.all():
             brew.brewmashingingredientbatch_set.create(
-                    brew=brew,
-                    ingredient=mashing_ingredient.ingredient,
-                    quantity=mashing_ingredient.quantity,
+                brew=brew,
+                ingredient=mashing_ingredient.ingredient,
+                quantity=mashing_ingredient.quantity,
+            )
+
+        for brewing_step in self.recipebrewingstep_set.all():
+            brew.brewbrewingstep_set.create(
+                brew=brew,
+                temperature=brewing_step.temperature,
+                duration=brewing_step.duration,
             )
 
         for boiling_ingredient in self.recipeboilingingredient_set.all():
             brew.brewboilingingredientbatch_set.create(
-                    brew=brew,
-                    ingredient=boiling_ingredient.ingredient,
-                    quantity=boiling_ingredient.quantity,
-                    time=boiling_ingredient.time,
+                brew=brew,
+                ingredient=boiling_ingredient.ingredient,
+                quantity=boiling_ingredient.quantity,
+                time=boiling_ingredient.time,
             )
 
         for whirlpool_ingredient in self.recipewhirlpoolingredient_set.all():
             brew.brewwhirlpoolingredientbatch_set.create(
-                    brew=brew,
-                    ingredient=whirlpool_ingredient.ingredient,
-                    quantity=whirlpool_ingredient.quantity,
+                brew=brew,
+                ingredient=whirlpool_ingredient.ingredient,
+                quantity=whirlpool_ingredient.quantity,
             )
 
         for yeast in self.recipeyeast_set.all():
             brew.brewyeastbatch_set.create(
-                    brew=brew,
-                    yeast=yeast.yeast,
-                    quantity=yeast.quantity,
+                brew=brew,
+                yeast=yeast.yeast,
+                quantity=yeast.quantity,
+            )
+
+        for fermentation_step in self.recipefermentationstep_set.all():
+            brew.brewfermentationstep_set.create(
+                brew=brew,
+                name=fermentation_step.name,
+                temperature=fermentation_step.temperature,
+                duration=fermentation_step.duration,
             )
 
         for adjunct in self.recipeadjunct_set.all():
             brew.brewadjunctbatch_set.create(
-                    brew=brew,
-                    ingredient=adjunct.ingredient,
-                    quantity=adjunct.quantity,
-                    date=brew.start_date + timedelta(days=adjunct.day)
+                brew=brew,
+                ingredient=adjunct.ingredient,
+                quantity=adjunct.quantity,
+                date=brew.start_date + timedelta(days=adjunct.day)
             )
+
+        # there are 2 fermentation analysis minimum
+        # one at the start and one at the end
+        # we create it here to make it easier for users
+        brew.brewfermentationanalysis_set.create(
+            brew=brew,
+            day=0,
+            plato_degree_or_density=0,
+        )
+        brew.brewfermentationanalysis_set.create(
+            brew=brew,
+            day=self.total_duration,
+            plato_degree_or_density=0,
+        )
 
         return brew
 
