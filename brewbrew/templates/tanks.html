@@ -72,7 +72,7 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="start-brewing-{{ tank.id }}">
             {% for recipe in original_recipes %}
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="/recipes/{{ recipe.id }}/create_brew?tank_id={{ tank.id }}">
                 <b>{{ recipe.name }}</b>
                 &nbsp;
                 <em class="float-right">{{ recipe.total_duration }} days</em>

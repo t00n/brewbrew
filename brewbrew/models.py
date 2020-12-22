@@ -174,7 +174,7 @@ class Recipe(models.Model):
     def total_duration(self):
         return sum(step.duration for step in self.recipefermentationstep_set.all())
 
-    def create_brew(self):
+    def create_brew(self, tank=None):
         brew = Brew()
         brew.original_recipe = self
         now = datetime.now()
@@ -188,6 +188,7 @@ class Recipe(models.Model):
         brew.mashing_water_quantity = self.mashing_water_quantity
         brew.filtration_water_quantity = self.filtration_water_quantity
         brew.boiling_duration = self.boiling_duration
+        brew.fermentation_tank = tank
         brew.save()
 
         for mashing_ingredient in self.recipemashingingredient_set.all():

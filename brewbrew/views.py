@@ -1,5 +1,6 @@
 from datetime import date
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import Http404
 
 from .forms import RecipeForm
 from .models import Brew, Recipe, Tank
@@ -34,3 +35,17 @@ def recipes(request):
         "create_form": RecipeForm,
         "recipes": recipes
     })
+
+def create_brew(request, id):
+	if request.method == "GET":
+		try:
+			recipe = Recipe.objects.get(pk=id)
+			tank = Tank.objects.get(pk=int(request.GET["tank_id"]))
+		except:
+			pass
+		else:
+			brew = recipe.create_brew(tank)
+
+			return redirect(f'/admin/brewbrew/brew/{brew.id}/change')
+
+	raise Http404("Page does not exist")
