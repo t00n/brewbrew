@@ -22,5 +22,6 @@ urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
     path('recipes/<int:id>/create_brew', create_brew),
+    path('stock', stock),
     path('tanks', tanks)
 ]

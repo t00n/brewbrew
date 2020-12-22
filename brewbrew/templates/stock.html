@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Stock{% endblock %}
+
+{% block content %}
+
+<table class="table">
+	<tr>
+		<th>DATE</th>
+		<th>BREW</th>
+		<th>NAME</th>
+		<th>SUPPLIER</th>
+		<th>BILL</th>
+		<th>BATCH</th>
+		<th>QUANTITY</th>
+		<th>TOTAL QUANTITY</th>
+	</tr>
+	{% for entry in stock_entries %}
+	<tr>
+		<td>{{ entry.date }}</td>
+		<td>{{ entry.brew }}</td>
+		<td>{{ entry.name }}</td>
+		<td>{{ entry.supplier }}</td>
+		<td>{{ entry.bill }}</td>
+		<td>{{ entry.batch }}</td>
+		<td>{{ entry.quantity }} {{ entry.unit }}</td>
+		<td>{{ entry.total_quantity }} {{ entry.unit }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}
