@@ -57,6 +57,7 @@ class IngredientBatchInput(models.Model):
         help_text="The batch that this entry refers to")
     bill_number = models.CharField(max_length=50, help_text="Bill number")
     quantity = models.FloatField(help_text="Quantity ")
+    input_time = models.DateTimeField(auto_now_add=True)
 
 
 class Tank(models.Model):
