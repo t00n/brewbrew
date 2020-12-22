@@ -22,6 +22,5 @@ urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
     path('recipes/<int:id>/create_brew', create_brew),
-    path('recipes', recipes),
     path('tanks', tanks)
 ]

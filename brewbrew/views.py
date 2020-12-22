@@ -22,20 +22,6 @@ def tanks(request):
         'original_recipes': Recipe.objects.all()
     })
 
-def recipes(request):
-    if request.method == "POST":
-        form = RecipeForm(request.POST)
-
-        if form.is_valid():
-            Recipe.objects.create(**form.cleaned_data)
-
-    recipes = Recipe.objects.all().order_by('name')
-
-    return render(request, 'recipes.html', {
-        "create_form": RecipeForm,
-        "recipes": recipes
-    })
-
 def create_brew(request, id):
 	if request.method == "GET":
 		try:
