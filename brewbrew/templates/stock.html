@@ -9,10 +9,9 @@
 <table class="table table-hover table-sm">
 	<tr>
 		<th>DATE</th>
-		<th>BREW</th>
+		<th>BREW/BILL</th>
 		<th>NAME</th>
 		<th>SUPPLIER</th>
-		<th>BILL</th>
 		<th>BATCH</th>
 		<th>QUANTITY</th>
 		<th>TOTAL QUANTITY</th>
@@ -20,10 +19,12 @@
 	{% for entry in stock_entries %}
 	<tr class="{% if entry.brew %}bg-warning{% else %}table-primary{% endif %}">
 		<td>{{ entry.date }}</td>
-		<td>{{ entry.brew }}</td>
+		<td>
+			{% if entry.brew %}<i class="fas fa-beer"></i> {{ entry.brew }}{% endif %}
+			{% if entry.bill %}<i class="fas fa-th-list"></i> {{ entry.bill }}{% endif %}
+		</td>
 		<td>{{ entry.name }}</td>
 		<td>{{ entry.supplier }}</td>
-		<td>{{ entry.bill }}</td>
 		<td>{{ entry.batch }}</td>
 		<td>{{ entry.quantity }} {{ entry.unit }}</td>
 		<td>{{ entry.total_quantity }} {{ entry.unit }}</td>
