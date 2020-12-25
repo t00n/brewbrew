@@ -17,15 +17,18 @@ def planning(request):
         min_date = min(brew.start_date, min_date)
         max_date = max(brew.end_date, max_date)
 
+    # extend to at least 30 days
+    calendar_duration = (max_date - min_date).days
+    if calendar_duration < 30:
+        days_to_extend = (30 - calendar_duration) // 2
+        min_date = min_date - timedelta(days=days_to_extend)
+        max_date = max_date + timedelta(days=days_to_extend)
+
     # create each date between min and max date
     dates = []
     while min_date <= max_date:
         dates.append(min_date)
         min_date += timedelta(days=1)
-
-    # extend to at least 30 days
-    while len(dates) < 30:
-        dates = [dates[0] - timedelta(days=1)] + dates + [dates[-1] + timedelta(days=1)]
 
     # create a list of cells for each tank
     # with optional brew and duration
@@ -35,7 +38,6 @@ def planning(request):
         tanks[tank.name] = []
 
         curr_date = min_date
-        brews = {}
         for brew in tank.brew_set.order_by('start_date'):
             # fill dates before the brew with empty cells
             while curr_date < brew.start_date:
@@ -47,10 +49,10 @@ def planning(request):
             
             # fill brew cells for the duration of the brew
             tanks[tank.name].append({
-                'duration': (brew.end_date - brew.start_date).days,
+                'duration': (brew.end_date - brew.start_date).days + 1,
                 'brew': brew,
             })
-            curr_date = brew.end_date
+            curr_date = brew.end_date + timedelta(days=1)
 
         # fill dates until the end of calendar
         while curr_date <= max_date:
