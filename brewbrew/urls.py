@@ -21,6 +21,7 @@ from .views import *
 urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
+    path('planning', planning),
     path('recipes/<int:id>/create_brew', create_brew),
     path('stock', stock),
     path('tanks', tanks)

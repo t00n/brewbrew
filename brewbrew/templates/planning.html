@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Planning{% endblock %}
+
+{% block content %}
+
+<table class="table table-bordered table-responsive">
+	<tr>
+		<th></th>
+		{% for date in dates %}
+		<th style="min-width: 110px" class="{% if date.weekday == 5 or date.weekday == 6 %}bg-dark{% endif %}">
+			{{ date.isoformat }}
+		</th>
+		{% endfor %}
+	</tr>
+
+	{% for tank, cells in tanks.items %}
+	<tr>
+		<th><i class="fas fa-flask"></i> Tank {{ tank }}</th>
+		{% for cell in cells %}
+		<td colspan="{{ cell.duration }}" class="{% if cell.brew %}bg-warning{% endif %}">
+			<center><a href="/admin/brewbrew/brew/{{ cell.brew.id }}/change">{{ cell.brew.batch_name }}</a></center>
+		</td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+	
+</table>
+
+{% endblock %}
