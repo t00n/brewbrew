@@ -9,7 +9,7 @@ from .models import Brew, Recipe, Tank, IngredientBatchInput, BrewAdjunctBatch
 def home(request):
     return render(request, 'home.html')
 
-def planning(request):
+def schedule(request):
     # get the min and max date of all brews
     min_date, max_date = date.max, date.min
 
@@ -63,10 +63,11 @@ def planning(request):
 
         tanks.append((tank, cells))
 
-    return render(request, 'planning.html', {
+    return render(request, 'schedule.html', {
         'dates': dates,
         'tanks': tanks,
         'original_recipes': Recipe.objects.all(),
+        'today_ratio': (datetime.now().date() - min_date).days / (max_date - min_date).days
     })
 
 def stock(request):
