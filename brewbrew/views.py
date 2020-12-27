@@ -21,18 +21,14 @@ def planning(request):
     calendar_duration = (max_date - min_date).days
     if calendar_duration < 30:
         days_to_extend = (30 - calendar_duration) // 2
-        min_date = min_date - timedelta(days=days_to_extend)
-        max_date = max_date + timedelta(days=days_to_extend)
+        min_date -= timedelta(days=days_to_extend)
+        max_date += timedelta(days=days_to_extend)
 
     # create each date between min and max date
-    dates = []
-    while min_date <= max_date:
-        dates.append(min_date)
-        min_date += timedelta(days=1)
+    dates = [min_date + timedelta(days=i) for i in range((max_date - min_date).days + 1)]
 
     # create a list of cells for each tank
     # with optional brew and duration
-    min_date, max_date = dates[0], dates[-1]
     tanks = {}
     for tank in Tank.objects.order_by('name'):
         tanks[tank.name] = []
