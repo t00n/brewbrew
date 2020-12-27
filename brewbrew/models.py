@@ -189,17 +189,18 @@ class Recipe(models.Model):
     def total_duration(self):
         return sum(step.duration for step in self.recipefermentationstep_set.all())
 
-    def create_brew(self, tank=None):
+    def create_brew(self, tank=None, start_date=None):
         brew = Brew()
         brew.original_recipe = self
         now = datetime.now()
-        brew.start_date = now.date()
-        brew.brew_start_time = now
-        brew.filtration_start_time = now
-        brew.boiling_start_time = now
-        brew.whirlpool_start_time = now
-        brew.cooling_start_time = now
-        brew.cooling_end_time = now
+        start_time = datetime.combine(start_date or now.date(), now.time())
+        brew.start_date = start_time.date()
+        brew.brew_start_time = start_time
+        brew.filtration_start_time = start_time
+        brew.boiling_start_time = start_time
+        brew.whirlpool_start_time = start_time
+        brew.cooling_start_time = start_time
+        brew.cooling_end_time = start_time
         brew.mashing_water_quantity = self.mashing_water_quantity
         brew.filtration_water_quantity = self.filtration_water_quantity
         brew.boiling_duration = self.boiling_duration

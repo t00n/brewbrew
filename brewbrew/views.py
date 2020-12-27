@@ -29,38 +29,44 @@ def planning(request):
 
     # create a list of cells for each tank
     # with optional brew and duration
-    tanks = {}
+    tanks = []
     for tank in Tank.objects.order_by('name'):
-        tanks[tank.name] = []
+        cells = []
 
         curr_date = min_date
         for brew in tank.brew_set.order_by('start_date'):
             # fill dates before the brew with empty cells
             while curr_date < brew.start_date:
-                tanks[tank.name].append({
+                cells.append({
                     'brew': None,
                     'duration': 1,
+                    'date': curr_date,
                 })
                 curr_date += timedelta(days=1)
             
             # fill brew cells for the duration of the brew
-            tanks[tank.name].append({
-                'duration': (brew.end_date - brew.start_date).days + 1,
+            cells.append({
                 'brew': brew,
+                'duration': (brew.end_date - brew.start_date).days + 1,
+                'date': curr_date,
             })
             curr_date = brew.end_date + timedelta(days=1)
 
         # fill dates until the end of calendar
         while curr_date <= max_date:
-            tanks[tank.name].append({
+            cells.append({
                 'brew': None,
                 'duration': 1,
+                'date': curr_date,
             })
             curr_date += timedelta(days=1)
+
+        tanks.append((tank, cells))
 
     return render(request, 'planning.html', {
         'dates': dates,
         'tanks': tanks,
+        'original_recipes': Recipe.objects.all(),
     })
 
 def stock(request):
@@ -181,12 +187,21 @@ def create_brew(request, id):
     if request.method == "GET":
         try:
             recipe = Recipe.objects.get(pk=id)
-            tank = Tank.objects.get(pk=int(request.GET["tank_id"]))
-        except:
-            pass
-        else:
-            brew = recipe.create_brew(tank)
+        except Recipe.DoesNotExist:
+            raise Http404("Page does not exist")
 
-            return redirect(f'/admin/brewbrew/brew/{brew.id}/change')
+        try:
+            tank = Tank.objects.get(pk=request.GET.get('tank_id'))
+        except Tank.DoesNotExist:
+            tank = None
+
+        try:
+            start_date = datetime.fromisoformat(request.GET.get('start_date', ''))
+        except ValueError:
+            start_date = None
+
+        brew = recipe.create_brew(tank, start_date)
+
+        return redirect(f'/admin/brewbrew/brew/{brew.id}/change')
 
     raise Http404("Page does not exist")
