@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Planning{% endblock %}
+{% block title %}Schedule{% endblock %}
 
 {% block content %}
 
@@ -8,9 +8,36 @@
 	th, td {
 		min-width: 50px;
 	}
+
+	/* dirty hacks to make each cell a full button */
+	.td-button {
+		padding: 0!important;
+		line-height: 49px;
+		text-align: center;
+	}
+
+	.td-button .dropdown-item {
+		line-height: initial;
+	}
+
+	.td-button:hover {
+		cursor: pointer;
+	}
+
+	.td-button > a {
+		width: auto;
+		height: auto;
+		display: block;
+		color: black;
+	}
+
+	.td-button > a:hover {
+		text-decoration: none;
+		filter: brightness(0.9);
+	}
 </style>
 
-<table id="planning" class="table table-bordered table-responsive">
+<table id="schedule" class="table table-bordered table-responsive">
 	<tr>
 		<th style="border-bottom: 0"></th>
 		{% for date in dates %}
@@ -37,11 +64,13 @@
 	<tr>
 		<th class="text-nowrap"><i class="fas fa-flask"></i>&nbsp;Tank {{ tank.name }}</th>
 		{% for cell in cells %}
-		<td colspan="{{ cell.duration }}" class="{% if cell.brew %}bg-warning{% endif %}">
+		<td colspan="{{ cell.duration }}" class="td-button">
 			{% if cell.brew %}
-			<center><a href="/admin/brewbrew/brew/{{ cell.brew.id }}/change">{{ cell.brew.batch_name }}</a></center>
+				<a href="/admin/brewbrew/brew/{{ cell.brew.id }}/change"
+				   class="bg-warning">
+					<i class="fas fa-beer"></i>&nbsp;{{ cell.brew.batch_name }}
+				</a>
 			{% else %}
-			<center>
 		      <div class="dropdown dropdown-toggle"
 		           type="button"
 	               id="start-brewing-{{ tank.id }}-{{ cell.date }}"
@@ -60,7 +89,6 @@
 	              </a>
 	            {% endfor %}
 	          </div>
-			</center>
 			{% endif %}
 		</td>
 		{% endfor %}
@@ -71,7 +99,7 @@
 
 <script type="text/javascript">
 	function scrollTableToday() {
-		var t = document.getElementById("planning");
+		var t = document.getElementById("schedule");
 		t.scrollTo({{ today_ratio }} * t.scrollWidth - t.clientWidth / 2, 0);
 	}
 	window.onload = scrollTableToday
