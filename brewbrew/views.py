@@ -6,8 +6,10 @@ from django.db.models import Min, Max
 
 from .models import Brew, Recipe, Tank, IngredientBatchInput, BrewAdjunctBatch
 
+
 def home(request):
     return render(request, 'home.html')
+
 
 def schedule(request):
     # get the min and max date of all brews
@@ -43,7 +45,7 @@ def schedule(request):
                     'date': curr_date,
                 })
                 curr_date += timedelta(days=1)
-            
+
             # fill brew cells for the duration of the brew
             cells.append({
                 'brew': brew,
@@ -70,6 +72,7 @@ def schedule(request):
         'today_ratio': (datetime.now().date() - min_date).days / (max_date - min_date).days
     })
 
+
 def stock(request):
     now = datetime.now()
     stock_entries = []
@@ -91,68 +94,73 @@ def stock(request):
     for brew in Brew.objects.filter(start_date__lte=now.date()):
         # brewing/mashing
         for bmib in brew.brewmashingingredientbatch_set.all():
-            stock_entries.append({
-                'date': brew.brew_start_time,
-                'brew': brew.batch_name,
-                'name': bmib.ingredient_batch.ingredient.variety,
-                'supplier': bmib.ingredient_batch.ingredient.supplier.name,
-                'bill': '',  # no bill number because we cannot know where this came from
-                'batch': bmib.ingredient_batch.batch_number,
-                'quantity': -bmib.quantity,
-                'unit': bmib.ingredient_batch.ingredient.unit,
-            })
+            if bmib.ingredient_batch:
+                stock_entries.append({
+                    'date': brew.brew_start_time,
+                    'brew': brew.batch_name,
+                    'name': bmib.ingredient_batch.ingredient.variety,
+                    'supplier': bmib.ingredient_batch.ingredient.supplier.name,
+                    'bill': '',  # no bill number because we cannot know where this came from
+                    'batch': bmib.ingredient_batch.batch_number,
+                    'quantity': -bmib.quantity,
+                    'unit': bmib.ingredient_batch.ingredient.unit,
+                })
 
         # boiling
         for bbib in brew.brewboilingingredientbatch_set.all():
-            stock_entries.append({
-                'date': brew.boiling_start_time,
-                'brew': brew.batch_name,
-                'name': bbib.ingredient_batch.ingredient.variety,
-                'supplier': bbib.ingredient_batch.ingredient.supplier.name,
-                'bill': '',  # no bill number because we cannot know where this came from
-                'batch': bbib.ingredient_batch.batch_number,
-                'quantity': -bbib.quantity,
-                'unit': bbib.ingredient_batch.ingredient.unit,
-            })
+            if bbib.ingredient_batch:
+                stock_entries.append({
+                    'date': brew.boiling_start_time,
+                    'brew': brew.batch_name,
+                    'name': bbib.ingredient_batch.ingredient.variety,
+                    'supplier': bbib.ingredient_batch.ingredient.supplier.name,
+                    'bill': '',  # no bill number because we cannot know where this came from
+                    'batch': bbib.ingredient_batch.batch_number,
+                    'quantity': -bbib.quantity,
+                    'unit': bbib.ingredient_batch.ingredient.unit,
+                })
 
         # whirlpool
         for bwib in brew.brewwhirlpoolingredientbatch_set.all():
-            stock_entries.append({
-                'date': brew.whirlpool_start_time,
-                'brew': brew.batch_name,
-                'name': bwib.ingredient_batch.ingredient.variety,
-                'supplier': bwib.ingredient_batch.ingredient.supplier.name,
-                'bill': '',  # no bill number because we cannot know where this came from
-                'batch': bwib.ingredient_batch.batch_number,
-                'quantity': -bwib.quantity,
-                'unit': bwib.ingredient_batch.ingredient.unit,
-            })
+            if bwib.ingredient_batch:
+                stock_entries.append({
+                    'date': brew.whirlpool_start_time,
+                    'brew': brew.batch_name,
+                    'name': bwib.ingredient_batch.ingredient.variety,
+                    'supplier': bwib.ingredient_batch.ingredient.supplier.name,
+                    'bill': '',  # no bill number because we cannot know where this came from
+                    'batch': bwib.ingredient_batch.batch_number,
+                    'quantity': -bwib.quantity,
+                    'unit': bwib.ingredient_batch.ingredient.unit,
+                })
 
         # yeasts
         for byb in brew.brewyeastbatch_set.all():
-            stock_entries.append({
-                'date': brew.cooling_end_time,  # cooling end time is the same as fermentation start time
-                'brew': brew.batch_name,
-                'name': byb.yeast_batch.ingredient.variety,
-                'supplier': byb.yeast_batch.ingredient.supplier.name,
-                'bill': '',  # no bill number because we cannot know where this came from
-                'batch': byb.yeast_batch.batch_number,
-                'quantity': -byb.quantity,
-                'unit': byb.yeast_batch.ingredient.unit,
-            })
+            if byb.yeast_batch:
+                stock_entries.append({
+                    'date': brew.cooling_end_time,  # cooling end time is the same as fermentation start time
+                    'brew': brew.batch_name,
+                    'name': byb.yeast_batch.ingredient.variety,
+                    'supplier': byb.yeast_batch.ingredient.supplier.name,
+                    'bill': '',  # no bill number because we cannot know where this came from
+                    'batch': byb.yeast_batch.batch_number,
+                    'quantity': -byb.quantity,
+                    'unit': byb.yeast_batch.ingredient.unit,
+                })
 
     # add the outputs from fermentations until now
     for bab in BrewAdjunctBatch.objects.filter(date__lte=now.date()):
-        stock_entries.append({
-            'date': datetime.combine(bab.date, datetime.max.time(), tzinfo=timezone.utc),
-            'brew': bab.brew.batch_name,
-            'name': bab.ingredient_batch.ingredient.variety,
-            'supplier': bab.ingredient_batch.ingredient.supplier.name,
-            'bill': '',  # no bill number because we cannot know where this came from
-            'batch': bab.ingredient_batch.batch_number,
-            'quantity': -bab.quantity,
-            'unit': bab.ingredient_batch.ingredient.unit,
-        })
+        if bab.ingredient_batch:
+            stock_entries.append({
+                'date': datetime.combine(bab.date, datetime.max.time(), tzinfo=timezone.utc),
+                'brew': bab.brew.batch_name,
+                'name': bab.ingredient_batch.ingredient.variety,
+                'supplier': bab.ingredient_batch.ingredient.supplier.name,
+                'bill': '',  # no bill number because we cannot know where this came from
+                'batch': bab.ingredient_batch.batch_number,
+                'quantity': -bab.quantity,
+                'unit': bab.ingredient_batch.ingredient.unit,
+            })
 
     # sort all entries by date
     stock_entries = sorted(stock_entries, key=lambda x: x['date'])
